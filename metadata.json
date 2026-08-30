@@ -1,0 +1,6 @@
+{
+  "name": "Silencia El Pánico",
+  "description": "Silenciez Votre Esprit, Arrêtez la Panique. Un système de reprogrammation nerveuse pour éteindre l'anxiété, le stress et la panique depuis la racine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

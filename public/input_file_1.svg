@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B1736" />
+      <stop offset="100%" stop-color="#3D2063" />
+    </linearGradient>
+    <linearGradient id="purple-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A78BFA" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <filter id="soft-book-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#080512" flood-opacity="0.6" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bg-4)" rx="24" />
+
+  <!-- Calm night stars/particles in background -->
+  <g opacity="0.12" fill="#C084FC">
+    <circle cx="500" cy="80" r="1.5" />
+    <circle cx="620" cy="140" r="2.5" />
+    <circle cx="430" cy="280" r="1.2" />
+    <circle cx="710" cy="220" r="2.2" />
+    <circle cx="580" cy="350" r="1.6" />
+    <circle cx="480" cy="190" r="3" />
+  </g>
+
+  <!-- Left Side: Elegant journal notebook layout mockup -->
+  <g transform="translate(100, 50)" filter="url(#soft-book-shadow)">
+    <!-- Book outer bounds -->
+    <rect x="-6" y="8" width="12" height="324" rx="4" fill="#140D24" />
+    <rect x="0" y="4" width="195" height="332" rx="10" fill="#2E1C4B" stroke="#8B5CF6" stroke-width="2.5" />
+    <!-- Gold / Purple inner binding margins -->
+    <rect x="8" y="12" width="179" height="316" rx="6" fill="none" stroke="#A78BFA" stroke-width="1.2" stroke-opacity="0.5" />
+    
+    <!-- Journal branding layout -->
+    <g transform="translate(97.5, 95)" text-anchor="middle">
+      <!-- Star/Moon night icon -->
+      <path d="M -12 -12 Q 2 -12 2 2 Q 2 16 -12 16 Q -26 16 -26 2 Q -26 -12 -12 -12 M -8 -6 Q -13 -6 -13 -1 Q -13 4 -8 4 Q -3 4 -3 -1 Q -3 -6 -8 -6" fill="#A78BFA" fill-opacity="0.25" />
+      <path d="M 0 -15 A 15 15 0 0 1 15 15 A 15 15 0 0 1 0 30 A 12 12 0 0 0 10 15 A 12 12 0 0 0 0 -15" fill="#C084FC" />
+      
+      <text x="0" y="85" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="900" font-size="14" letter-spacing="3">JOURNAL</text>
+      <text x="0" y="103" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="800" font-size="9" letter-spacing="1">DE DECHARGE</text>
+      <text x="0" y="125" fill="#C084FC" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="8" letter-spacing="1">MENTAL SPIRIT</text>
+      <line x1="-50" y1="145" x2="50" y2="145" stroke="#8B5CF6" stroke-width="1" stroke-opacity="0.5" />
+    </g>
+
+    <text x="97.5" y="290" fill="#9CA3AF" font-family="'Inter', sans-serif" font-weight="600" font-size="7" text-anchor="middle">THERAPEUTIC EMOTIONAL RELEASE</text>
+  </g>
+
+  <!-- Right Side: Exquisite typography & details -->
+  <g transform="translate(390, 80)">
+    <!-- Active badge flag -->
+    <rect x="0" y="0" width="112" height="26" rx="13" fill="#8B5CF6" fill-opacity="0.15" stroke="#9F7AEA" stroke-width="1.2" />
+    <text x="56" y="17" fill="#C084FC" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="9" text-anchor="middle" letter-spacing="1.2">COGNITIVE WRITING</text>
+    
+    <!-- Description -->
+    <text x="0" y="65" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="900" font-size="28" letter-spacing="1">CADEAU #4</text>
+    <text x="0" y="97" fill="url(#purple-glow)" font-family="'Inter', sans-serif" font-weight="900" font-size="20">JOURNAL DE DECHARGE MENTALE</text>
+    <text x="0" y="125" fill="#E2E8F0" font-family="'Inter', sans-serif" font-weight="700" font-size="12" opacity="0.8">Libérez les émotions bloquées et videz votre sac mental avant le coucher.</text>
+  </g>
+
+  <!-- Therapeutic writing pen details -->
+  <g transform="translate(390, 240)">
+    <!-- Feather pen / Fountain tip icon drawing lines -->
+    <g transform="translate(10, 25)" stroke="#A78BFA" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <path d="M 0 0 C 15 -15 25 -5 45 -25 Q 55 -35 70 -50" />
+      <path d="M 3 3 Q -5 12 -12 24 L -18 36 L -8 30 Q 5 24 15 15" stroke-width="1.5" />
+      <!-- Drawing a glowing mental path of gold/silk -->
+      <path d="M -12 24 Q -45 35 -65 14 T -105 24" stroke="url(#purple-glow)" stroke-width="4.5" opacity="0.6" stroke-dasharray="1,1" />
+    </g>
+
+    <g transform="translate(110, 18)" font-family="'Inter', sans-serif" fill="#E2E8F0" font-weight="800" font-size="12">
+      <text x="0" y="10">• Désamorcer l'anxiété chronique par l'écriture rationnelle</text>
+      <text x="0" y="32">• Vider la boîte noire de vos ruminations pour un sommeil serein</text>
+    </g>
+  </g>
+</svg>

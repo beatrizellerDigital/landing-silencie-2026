@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Ensure background-clip is listed after -webkit-background-clip */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Ensure standard compatibility for line-clamp */
+.line-clamp-none {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}

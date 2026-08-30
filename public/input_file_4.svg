@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Definitions for gradients and shadows -->
+  <defs>
+    <linearGradient id="bamboo-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2D5A27" />
+      <stop offset="50%" stop-color="#4E8C40" />
+      <stop offset="100%" stop-color="#1E3F1A" />
+    </linearGradient>
+    <linearGradient id="stone-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8F9499" />
+      <stop offset="100%" stop-color="#555A60" />
+    </linearGradient>
+    <linearGradient id="water-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#AEDDDD" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#4EA8A8" stop-opacity="0.8" />
+    </linearGradient>
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0F2027" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Background Card canvas -->
+  <rect width="100%" height="100%" fill="#F8FAFA" rx="24" />
+
+  <!-- Main circular framing board -->
+  <ellipse cx="250" cy="180" rx="140" ry="160" fill="none" stroke="#2D524B" stroke-width="2.5" stroke-dasharray="2000" stroke-opacity="0.3" />
+  <path d="M 110 180 A 140 160 0 0 1 390 180" fill="none" stroke="#2D524B" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.6"/>
+
+  <!-- --- 1. BAMBOO SHOOTS (Left) --- -->
+  <g id="bamboo" filter="url(#soft-shadow)">
+    <!-- Shoot 1 (Tall center) -->
+    <path d="M 130 110 Q 133 180 135 250 L 131 250 Q 129 180 126 110 Z" fill="url(#bamboo-grad)" />
+    <!-- Shoot 1 Segment cuts -->
+    <line x1="126" y1="140" x2="132" y2="141" stroke="#F8FAFA" stroke-width="1.5" />
+    <line x1="128" y1="180" x2="134" y2="181" stroke="#F8FAFA" stroke-width="1.5" />
+    <line x1="130" y1="215" x2="136" y2="216" stroke="#F8FAFA" stroke-width="1.5" />
+    
+    <!-- Shoot 2 (Shorter left) -->
+    <path d="M 105 160 Q 110 215 113 270 L 109 270 Q 106 215 101 160 Z" fill="url(#bamboo-grad)" />
+    <line x1="102" y1="190" x2="108" y2="191" stroke="#F8FAFA" stroke-width="1.5" />
+    <line x1="105" y1="230" x2="111" y2="231" stroke="#F8FAFA" stroke-width="1.5" />
+
+    <!-- Shoot 3 (Thin right curve in background) -->
+    <path d="M 148 150 Q 146 200 144 260 L 141 260 Q 143 200 145 150 Z" fill="url(#bamboo-grad)" opacity="0.8" />
+
+    <!-- Bamboo Leaves -->
+    <!-- Leaf 1 -->
+    <path d="M 128 140 Q 100 135 85 150 Q 110 150 128 141" fill="#427A3C" />
+    <!-- Leaf 2 -->
+    <path d="M 131 180 Q 160 170 175 185 Q 145 185 131 181" fill="#427A3C" />
+    <!-- Leaf 3 -->
+    <path d="M 104 190 Q 75 185 60 205 Q 85 205 104 191" fill="#3D7037" />
+    <!-- Leaf 4 -->
+    <path d="M 107 230 Q 130 220 145 235 Q 120 235 107 231" fill="#3D7037" />
+    <!-- Leaf 5 -->
+    <path d="M 129 215 Q 100 210 90 225 Q 112 225 129 216" fill="#4B8943" />
+  </g>
+
+  <!-- --- 2. ZEN BALANCED PEBBLES (Bottom Left) --- -->
+  <g id="zen-stones" filter="url(#soft-shadow)">
+    <!-- Base stone (Large) -->
+    <ellipse cx="170" cy="265" rx="42" ry="18" fill="url(#stone-grad)" />
+    <!-- Middle stone -->
+    <ellipse cx="171" cy="242" rx="30" ry="14" fill="url(#stone-grad)" />
+    <!-- Top stone (Small) -->
+    <ellipse cx="168" cy="223" rx="20" ry="10" fill="url(#stone-grad)" />
+    
+    <!-- Stone reflections/highlights -->
+    <path d="M 145 260 Q 170 252 195 260" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3" />
+    <path d="M 153 238 Q 171 232 189 238" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3" />
+    <path d="M 157 220 Q 168 216 179 220" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3" />
+  </g>
+
+  <!-- --- 3. SERENE SILHOUETTE & BRAIN (Center) --- -->
+  <g id="profile" filter="url(#soft-shadow)">
+    <!-- Outer profile line -->
+    <path d="M 215 250 
+             C 240 250 255 230 255 195
+             C 255 185 252 178 250 170
+             C 246 160 230 155 220 140
+             C 208 122 205 105 210 85
+             C 215 65 235 50 265 50
+             C 295 50 318 68 322 92
+             C 324 105 320 120 312 130
+             C 305 140 300 150 300 160
+             C 300 185 285 210 260 215
+             C 248 218 240 230 235 245
+             C 230 258 220 268 200 270" 
+          fill="none" stroke="#12352F" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Closed serene eyes -->
+    <path d="M 233 125 Q 240 130 248 126" fill="none" stroke="#12352F" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- ORGANIC CLOUD BRAIN (Inside Profile) -->
+    <!-- Elegant interconnected brain folds representing neural calm -->
+    <g stroke="#1F4D45" stroke-width="1.8" fill="none" opacity="0.85" stroke-linecap="round">
+      <!-- Main Brain contour -->
+      <path d="M 245 92 C 242 80, 258 70, 270 75" />
+      <path d="M 270 75 C 282 70, 298 75, 295 90" />
+      <path d="M 295 90 C 305 92, 305 108, 295 112" />
+      <path d="M 295 112 C 300 120, 290 130, 280 125" />
+      <path d="M 280 125 C 275 130, 260 128, 255 118" />
+      <path d="M 255 118 C 245 115, 245 100, 250 95" />
+      
+      <!-- Inner neural folds -->
+      <path d="M 258 98 Q 275 90 286 100" />
+      <path d="M 265 85 Q 270 95 280 82" />
+      <path d="M 270 108 Q 285 105 290 115" />
+      <path d="M 275 95 C 270 110, 260 105, 255 105" />
+    </g>
+  </g>
+
+  <!-- --- 4. WATER CASCADE & RIPPLES (Bottom Right) --- -->
+  <g id="waterfall" filter="url(#soft-shadow)">
+    <!-- Rocks framing the waterfall -->
+    <path d="M 310 270 C 315 250 335 240 345 255" fill="none" stroke="#5E6368" stroke-width="6" />
+    <path d="M 345 255 C 352 245 372 242 380 258" fill="none" stroke="#4F5459" stroke-width="8" />
+    <path d="M 295 272 C 302 260 318 262 322 272" fill="none" stroke="#505559" stroke-width="5" />
+
+    <!-- Waterfall Streams -->
+    <path d="M 342 248 C 342 258 335 264 334 275" fill="none" stroke="url(#water-grad)" stroke-width="4" stroke-linecap="round" />
+    <path d="M 348 248 C 347 257 342 266 341 275" fill="none" stroke="url(#water-grad)" stroke-width="3" stroke-linecap="round" />
+    <path d="M 336 250 C 336 258 330 265 328 275" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.8" />
+
+    <!-- Water droplet at center-splash -->
+    <circle cx="250" cy="255" r="3" fill="#4EA8A8" />
+    <path d="M 250 252 L 250 242" stroke="#4EA8A8" stroke-width="1.5" stroke-linecap="round" />
+
+    <!-- Concentric circular water ripples -->
+    <ellipse cx="250" cy="275" rx="35" ry="10" fill="none" stroke="#4EA8A8" stroke-width="1.2" opacity="0.7" />
+    <ellipse cx="250" cy="275" rx="65" ry="17" fill="none" stroke="#4EA8A8" stroke-width="1.8" opacity="0.4" />
+    <ellipse cx="250" cy="275" rx="95" ry="24" fill="none" stroke="#4EA8A8" stroke-width="1.2" opacity="0.2" />
+    <ellipse cx="250" cy="275" rx="120" ry="30" fill="none" stroke="#4EA8A8" stroke-width="0.8" opacity="0.1" />
+  </g>
+
+  <!-- Floating Green Laurel Leaves representing breath and wind -->
+  <path d="M 285 185 Q 265 170 270 150 Q 290 165 285 185" fill="#427A3C" opacity="0.75" />
+  <line x1="285" y1="185" x2="277.5" y2="167.5" stroke="#FFFFFF" stroke-width="0.6" opacity="0.5" />
+  
+  <path d="M 292 205 Q 312 195 305 175 Q 295 195 292 205" fill="#3D7037" opacity="0.75" />
+  <path d="M 268 205 Q 255 190 262 175 Q 272 190 268 205" fill="#4E8C40" opacity="0.65" />
+
+  <!-- --- 5. LOGO BRAND TYPOGRAPHY (Bottom Panel) --- -->
+  <g id="brand-text" text-anchor="middle">
+    <!-- SILENCIA -->
+    <text x="250" y="342" font-family="'Inter', 'Helvetica Neue', sans-serif" font-weight="900" font-size="34" letter-spacing="11" fill="#12352F">SILENCIE</text>
+    
+    <!-- Votre Esprit -->
+    <text x="250" y="390" font-family="'Playfair Display', 'Times New Roman', serif" font-weight="normal" font-style="italic" font-size="38" fill="#2E625A">Votre Esprit</text>
+    
+    <!-- Thin line separator -->
+    <line x1="120" y1="414" x2="380" y2="414" stroke="#D1E2E2" stroke-width="1.5" />
+    <!-- Center Dot -->
+    <circle cx="250" cy="414" r="5" fill="#2E625A" />
+
+    <!-- SUBTITLE: ARRÊTEZ LA PANIQUE -->
+    <text x="250" y="442" font-family="'JetBrains Mono', 'Courier New', monospace" font-weight="700" font-size="15" letter-spacing="4.5" fill="#5F7673">• ARRÊTEZ LA PANIQUE •</text>
+    
+    <!-- Decorative side leaves -->
+    <path d="M 90 435 Q 75 425 65 435 Q 80 445 90 435" fill="#5F7673" opacity="0.5" />
+    <path d="M 410 435 Q 425 425 435 435 Q 420 445 410 435" fill="#5F7673" opacity="0.5" />
+  </g>
+</svg>
