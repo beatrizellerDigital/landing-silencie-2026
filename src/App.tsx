@@ -6,6 +6,7 @@ import { TRANSLATIONS, Language } from './translations';
 
 // Custom modular components imported
 import PromiseHero from './components/PromiseHero';
+import VideoSection from './components/VideoSection';
 import AccrocheSection from './components/AccrocheSection';
 import BenefitsAccordion from './components/BenefitsAccordion';
 import ProgramModules from './components/ProgramModules';
@@ -105,6 +106,7 @@ export default function App() {
 
           {/* Desktop Anchor Link Items */}
           <div className="hidden lg:flex items-center space-x-7 text-xs font-extrabold tracking-wide uppercase text-slate-700">
+            <button type="button" onClick={() => handleScrollToElement('video-section')} className="hover:text-sky-600 transition cursor-pointer">{TRANSLATIONS[lang].nav.video}</button>
             <button type="button" onClick={() => handleScrollToElement('problem-section')} className="hover:text-sky-600 transition cursor-pointer">{TRANSLATIONS[lang].nav.problem}</button>
             <button type="button" onClick={() => handleScrollToElement('benefits-accordion')} className="hover:text-sky-600 transition cursor-pointer">{TRANSLATIONS[lang].nav.benefits}</button>
             <button type="button" onClick={() => handleScrollToElement('modules-section')} className="hover:text-sky-600 transition cursor-pointer">{TRANSLATIONS[lang].nav.program}</button>
@@ -178,6 +180,7 @@ export default function App() {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-white border-b border-sky-100 px-4 py-6 space-y-4 shadow-xl z-40 relative text-center font-bold text-sm tracking-wide text-slate-700"
           >
+            <button type="button" onClick={() => handleScrollToElement('video-section')} className="block w-full py-2 hover:text-sky-600">{TRANSLATIONS[lang].nav.video}</button>
             <button type="button" onClick={() => handleScrollToElement('problem-section')} className="block w-full py-2 hover:text-sky-600">{TRANSLATIONS[lang].nav.problem}</button>
             <button type="button" onClick={() => handleScrollToElement('benefits-accordion')} className="block w-full py-2 hover:text-sky-600">{TRANSLATIONS[lang].nav.benefits}</button>
             <button type="button" onClick={() => handleScrollToElement('modules-section')} className="block w-full py-2 hover:text-sky-600">{TRANSLATIONS[lang].nav.program}</button>
@@ -192,6 +195,11 @@ export default function App() {
         
         {/* SECTION 1: PROMISE HERO BANNER */}
         <PromiseHero lang={lang} onScrollToPricing={() => handleScrollToElement('pricing-checkout-block')} />
+
+        {/* SECTION 2: VIDEO PRESENTATION / VSL */}
+        <div id="video-section" className="py-8 bg-white/5 border-t border-b border-white/10">
+          <VideoSection lang={lang} onScrollToPricing={() => handleScrollToElement('pricing-checkout-block')} />
+        </div>
 
         {/* BRIGHT ANCHOR SPLIT: THE DEEP HOOK PROBLEM */}
         <div id="problem-section" className="bg-gradient-to-b from-[#0ea5e9] to-[#0284c7] border-t border-sky-350/20">
