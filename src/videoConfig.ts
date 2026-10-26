@@ -55,7 +55,7 @@ export interface VideoConfiguration {
 export const DEFAULT_VIDEO_CONFIG: VideoConfiguration = {
   enabled: true,
   // Video oficial de presentación del libro: "Silencia Tu Mente"
-  url: '/assets/aistudio/SILENCIA_TU_MENTE-es_1a438279.mp4',
+  url: '/videos/presentacion.mp4',
   // Portada oficial del libro
   posterUrl: '/assets/aistudio/image_0c66d102.png',
   autoplay: true,

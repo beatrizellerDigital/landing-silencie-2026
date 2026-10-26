@@ -22,7 +22,11 @@ import {
   Subtitles,
   Languages,
   HelpCircle,
-  FolderOpen
+  FolderOpen,
+  Globe,
+  Download,
+  ExternalLink,
+  HardDrive
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { TRANSLATIONS, Language } from '../translations';
@@ -133,12 +137,16 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'upload' | 'url' | 'guide'>('upload');
+  const [activeTab, setActiveTab] = useState<'upload' | 'url' | 'deploy' | 'guide'>('upload');
   
   // Local inputs in modal
   const [tempUrl, setTempUrl] = useState(config.url);
   const [tempPoster, setTempPoster] = useState(config.posterUrl);
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  // Video playback error handling & automatic fallback
+  const [videoError, setVideoError] = useState(false);
+  const [fallbackTried, setFallbackTried] = useState(false);
 
   // Attached video state (IndexedDB Blob -> ObjectURL)
   const [attachedBlobUrl, setAttachedBlobUrl] = useState<string | null>(null);
@@ -152,6 +160,32 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
   const [isSubtitlesEnabled, setIsSubtitlesEnabled] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Reset error when URL or attached state changes
+  useEffect(() => {
+    setVideoError(false);
+    setFallbackTried(false);
+  }, [config.url, config.isAttachedFile, attachedBlobUrl, isPlaying]);
+
+  const handleVideoError = () => {
+    if (!fallbackTried) {
+      setFallbackTried(true);
+      if (videoRef.current) {
+        if (effectiveVideo.embedUrl.includes('aistudio')) {
+          videoRef.current.src = '/videos/presentacion.mp4';
+          videoRef.current.load();
+          videoRef.current.play().catch(() => {});
+          return;
+        } else if (effectiveVideo.embedUrl.includes('/videos/')) {
+          videoRef.current.src = '/assets/aistudio/SILENCIA_TU_MENTE-es_1a438279.mp4';
+          videoRef.current.load();
+          videoRef.current.play().catch(() => {});
+          return;
+        }
+      }
+    }
+    setVideoError(true);
+  };
 
   // Keep subtitle language synchronized with the global page language whenever it changes
   useEffect(() => {
@@ -518,50 +552,99 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
             <div className="relative w-full h-full">
               {effectiveVideo.type === 'mp4' ? (
                 <>
-                  <video
-                    ref={videoRef}
-                    src={effectiveVideo.embedUrl}
-                    controls={config.controls}
-                    autoPlay={config.autoplay}
-                    loop={config.loop}
-                    muted={config.muted}
-                    playsInline
-                    preload="metadata"
-                    crossOrigin="anonymous"
-                    onTimeUpdate={handleTimeUpdate}
-                    className="w-full h-full object-contain bg-black"
-                  >
-                    {/* Native WebVTT tracks for standard browser support */}
-                    <track
-                      kind="subtitles"
-                      src={SUBTITLE_TRACKS.es.src}
-                      srcLang="es"
-                      label="Español"
-                      default={activeSubtitleLang === 'es' && isSubtitlesEnabled}
-                    />
-                    <track
-                      kind="subtitles"
-                      src={SUBTITLE_TRACKS.fr.src}
-                      srcLang="fr"
-                      label="Français"
-                      default={activeSubtitleLang === 'fr' && isSubtitlesEnabled}
-                    />
-                    <track
-                      kind="subtitles"
-                      src={SUBTITLE_TRACKS.en.src}
-                      srcLang="en"
-                      label="English"
-                      default={activeSubtitleLang === 'en' && isSubtitlesEnabled}
-                    />
-                    <track
-                      kind="subtitles"
-                      src={SUBTITLE_TRACKS.pt.src}
-                      srcLang="pt"
-                      label="Português"
-                      default={activeSubtitleLang === 'pt' && isSubtitlesEnabled}
-                    />
-                    Tu navegador no soporta el reproductor de video.
-                  </video>
+                  {videoError ? (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-white space-y-3.5">
+                      <div className="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                        <AlertTriangle className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-base font-bold text-white">Video pendiente de sincronizar en tu servidor</h4>
+                        <p className="text-xs text-slate-300 max-w-md leading-relaxed mx-auto">
+                          El archivo de video aún no se encuentra publicado en este dominio ({typeof window !== 'undefined' ? window.location.hostname : 'servidor'}). Para que tus visitantes lo vean en tu web en vivo, debes actualizar tu despliegue en Vercel.
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVideoError(false);
+                            setFallbackTried(false);
+                            if (videoRef.current) {
+                              videoRef.current.src = '/videos/presentacion.mp4';
+                              videoRef.current.load();
+                              videoRef.current.play().catch(() => {});
+                            }
+                          }}
+                          className="px-3.5 py-2 bg-sky-500 hover:bg-sky-400 text-white text-xs font-bold rounded-xl transition cursor-pointer flex items-center space-x-1.5"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span>Reintentar reproducción</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveTab('deploy');
+                            setIsConfigOpen(true);
+                          }}
+                          className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold rounded-xl transition cursor-pointer flex items-center space-x-1.5 border border-slate-700"
+                        >
+                          <Globe className="w-3.5 h-3.5 text-sky-400" />
+                          <span>¿Cómo publicar en tu dominio?</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <video
+                        ref={videoRef}
+                        src={effectiveVideo.embedUrl}
+                        controls={config.controls}
+                        autoPlay={config.autoplay}
+                        loop={config.loop}
+                        muted={config.muted}
+                        playsInline
+                        preload="metadata"
+                        crossOrigin="anonymous"
+                        onTimeUpdate={handleTimeUpdate}
+                        onError={handleVideoError}
+                        className="w-full h-full object-contain bg-black"
+                      >
+                        <source src={effectiveVideo.embedUrl} type="video/mp4" />
+                        <source src="/videos/presentacion.mp4" type="video/mp4" />
+                        <source src="/assets/aistudio/SILENCIA_TU_MENTE-es_1a438279.mp4" type="video/mp4" />
+                        {/* Native WebVTT tracks for standard browser support */}
+                        <track
+                          kind="subtitles"
+                          src={SUBTITLE_TRACKS.es.src}
+                          srcLang="es"
+                          label="Español"
+                          default={activeSubtitleLang === 'es' && isSubtitlesEnabled}
+                        />
+                        <track
+                          kind="subtitles"
+                          src={SUBTITLE_TRACKS.fr.src}
+                          srcLang="fr"
+                          label="Français"
+                          default={activeSubtitleLang === 'fr' && isSubtitlesEnabled}
+                        />
+                        <track
+                          kind="subtitles"
+                          src={SUBTITLE_TRACKS.en.src}
+                          srcLang="en"
+                          label="English"
+                          default={activeSubtitleLang === 'en' && isSubtitlesEnabled}
+                        />
+                        <track
+                          kind="subtitles"
+                          src={SUBTITLE_TRACKS.pt.src}
+                          srcLang="pt"
+                          label="Português"
+                          default={activeSubtitleLang === 'pt' && isSubtitlesEnabled}
+                        />
+                        Tu navegador no soporta el reproductor de video.
+                      </video>
+                    </>
+                  )}
 
                   {/* HIGH-CONTRAST DYNAMIC SUBTITLES OVERLAY */}
                   {/* Guarantees 100% sharp, perfectly readable subtitles on every mobile & desktop browser */}
@@ -777,12 +860,12 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
                 </p>
               </div>
 
-              {/* Navigation Tabs between Attach File vs Web Link vs Guide */}
-              <div className="grid grid-cols-3 gap-2 p-1 bg-slate-100 rounded-xl">
+              {/* Navigation Tabs between Attach File vs Web Link vs Deploy vs Guide */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 bg-slate-100 rounded-xl">
                 <button
                   type="button"
                   onClick={() => setActiveTab('upload')}
-                  className={`py-2 px-2 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+                  className={`py-2 px-1.5 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
                     activeTab === 'upload'
                       ? 'bg-white text-sky-700 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -795,7 +878,7 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
                 <button
                   type="button"
                   onClick={() => setActiveTab('url')}
-                  className={`py-2 px-2 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+                  className={`py-2 px-1.5 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
                     activeTab === 'url'
                       ? 'bg-white text-sky-700 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -807,8 +890,21 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
 
                 <button
                   type="button"
+                  onClick={() => setActiveTab('deploy')}
+                  className={`py-2 px-1.5 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+                    activeTab === 'deploy'
+                      ? 'bg-white text-indigo-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Publicar en Web</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setActiveTab('guide')}
-                  className={`py-2 px-2 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+                  className={`py-2 px-1.5 text-xs font-black rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
                     activeTab === 'guide'
                       ? 'bg-white text-emerald-700 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -1029,8 +1125,120 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
                 </div>
               )}
 
-              {/* POSTER URL (Always configurable except in guide tab) */}
-              {activeTab !== 'guide' && (
+              {/* TAB 4: DEPLOY TO CUSTOM DOMAIN (beatzellerdigital-freelive.company / Vercel) */}
+              {activeTab === 'deploy' && (
+                <div className="space-y-4 text-xs text-slate-700">
+                  <div className="p-3.5 bg-sky-50 rounded-2xl border border-sky-200 text-sky-950 space-y-2">
+                    <div className="flex items-center space-x-2 font-black text-xs text-sky-900">
+                      <Globe className="w-4 h-4 text-sky-600 shrink-0" />
+                      <span>¿Por qué no se ve aún en tu dominio público?</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-sky-800 font-normal">
+                      Tu web <a href="https://beatzellerdigital-freelive.company/" target="_blank" rel="noreferrer" className="underline font-bold text-sky-900">beatzellerdigital-freelive.company</a> está conectada a tu cuenta de hosting en <strong>Vercel</strong> con la versión del 15 de octubre. 
+                      Los cambios realizados en Google AI Studio se prueban aquí en tu entorno de desarrollo. Para que tus visitantes lo vean en tu enlace en vivo, solo necesitas subir o sincronizar esta actualización en Vercel.
+                    </p>
+                  </div>
+
+                  {/* Direct Download Packages */}
+                  <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2.5">
+                    <span className="font-black text-xs text-slate-900 block flex items-center space-x-1.5">
+                      <Download className="w-4 h-4 text-emerald-600" />
+                      <span>Descarga los paquetes listos para tu hosting:</span>
+                    </span>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <a
+                        href="/dist.zip"
+                        download="dist.zip"
+                        className="p-3 rounded-xl bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 transition shadow-xs flex flex-col justify-between group cursor-pointer"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-black text-slate-900 text-xs group-hover:text-emerald-700 flex items-center space-x-1">
+                              <HardDrive className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>dist.zip (Compilación lista)</span>
+                            </span>
+                            <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Recomendado</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 font-normal leading-tight">
+                            Carpeta de producción compilada. Contiene el video .mp4, subtítulos en 4 idiomas y código optimizado.
+                          </p>
+                        </div>
+                        <span className="text-[11px] font-bold text-emerald-600 mt-2 inline-flex items-center space-x-1">
+                          <span>Descargar dist.zip</span>
+                          <Download className="w-3 h-3" />
+                        </span>
+                      </a>
+
+                      <a
+                        href="/landing_code.zip"
+                        download="landing_code.zip"
+                        className="p-3 rounded-xl bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 transition shadow-xs flex flex-col justify-between group cursor-pointer"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-black text-slate-900 text-xs group-hover:text-sky-700 flex items-center space-x-1">
+                              <FileVideo className="w-3.5 h-3.5 text-sky-600" />
+                              <span>landing_code.zip</span>
+                            </span>
+                            <span className="text-[9px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">Código</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 font-normal leading-tight">
+                            Código fuente completo con todos los componentes y archivos para tu repositorio de GitHub.
+                          </p>
+                        </div>
+                        <span className="text-[11px] font-bold text-sky-600 mt-2 inline-flex items-center space-x-1">
+                          <span>Descargar código</span>
+                          <Download className="w-3 h-3" />
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Simple Steps for Vercel */}
+                  <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                    <span className="font-black text-xs text-slate-900 block">¿Cómo actualizar Vercel en 2 minutos?</span>
+                    
+                    <div className="space-y-2 text-[11px] text-slate-600">
+                      <div className="flex items-start space-x-2">
+                        <span className="w-4 h-4 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-[9px] shrink-0 mt-0.5">A</span>
+                        <div>
+                          <strong>Si tu Vercel está conectado a GitHub:</strong>
+                          <p className="text-slate-500 mt-0.5">Sube los archivos de <code>landing_code.zip</code> a tu repositorio de GitHub. Vercel detectará el commit y compilará la página con el video de inmediato.</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-2">
+                        <span className="w-4 h-4 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-[9px] shrink-0 mt-0.5">B</span>
+                        <div>
+                          <strong>O subir la carpeta dist directamente:</strong>
+                          <p className="text-slate-500 mt-0.5">Descomprime <code>dist.zip</code> y súbela a tu proyecto en Vercel, o mediante tu terminal ejecutando <code>vercel --prod</code>.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain Checker Link */}
+                  <div className="p-3 bg-slate-900 text-white rounded-xl flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                      <span className="text-xs font-mono">beatzellerdigital-freelive.company</span>
+                    </div>
+                    <a
+                      href="https://beatzellerdigital-freelive.company/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold rounded-lg transition inline-flex items-center space-x-1"
+                    >
+                      <span>Abrir tu dominio</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              {/* POSTER URL (Configurable in upload & url tabs) */}
+              {(activeTab === 'upload' || activeTab === 'url') && (
                 <div className="text-xs font-bold border-t border-slate-100 pt-3">
                   <label className="block text-slate-700 mb-1.5 uppercase tracking-wider text-[11px]">
                     URL de la Imagen de Portada (Poster) :
@@ -1077,7 +1285,7 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
                     {t.closeBtn}
                   </button>
 
-                  {activeTab !== 'guide' && (
+                  {activeTab !== 'guide' && activeTab !== 'deploy' && (
                     <button
                       type="button"
                       onClick={handleSaveConfig}
