@@ -117,16 +117,26 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
         const stored = localStorage.getItem('app_video_config');
         if (stored) {
           const parsed = JSON.parse(stored);
-          // If stored value is the old placeholder YouTube video or old preset, upgrade to official video
+          const hasBadPoster = !parsed.posterUrl || 
+            parsed.posterUrl.includes('0c66d102') || 
+            parsed.posterUrl.includes('403') ||
+            parsed.posterUrl.includes('/assets/aistudio/image_');
+
           if (
+            hasBadPoster ||
             !parsed.url || 
             parsed.url === 'https://www.youtube.com/watch?v=inpok4MKVLM' ||
             parsed.posterUrl === 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80'
           ) {
-            localStorage.setItem('app_video_config', JSON.stringify(DEFAULT_VIDEO_CONFIG));
-            return DEFAULT_VIDEO_CONFIG;
+            const cleanConfig: VideoConfiguration = {
+              ...DEFAULT_VIDEO_CONFIG,
+              ...(parsed.url && parsed.url !== 'https://www.youtube.com/watch?v=inpok4MKVLM' ? { url: parsed.url } : {}),
+              posterUrl: DEFAULT_VIDEO_CONFIG.posterUrl,
+            };
+            localStorage.setItem('app_video_config', JSON.stringify(cleanConfig));
+            return cleanConfig;
           }
-          return { ...DEFAULT_VIDEO_CONFIG, ...parsed };
+          return { ...DEFAULT_VIDEO_CONFIG, ...parsed, posterUrl: DEFAULT_VIDEO_CONFIG.posterUrl };
         }
       } catch (e) {
         console.error('Failed reading stored video config:', e);
@@ -134,6 +144,19 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
     }
     return DEFAULT_VIDEO_CONFIG;
   });
+
+  // Purge any residual 403 error image from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('app_video_config');
+      if (stored && (stored.includes('0c66d102') || stored.includes('403') || stored.includes('/assets/aistudio/image_'))) {
+        localStorage.removeItem('app_video_config');
+        setConfig(DEFAULT_VIDEO_CONFIG);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
@@ -459,12 +482,12 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
       {/* Main Video Wrapper Box */}
       <div className="relative bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-2xl border border-sky-200/80">
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-6">
+        {/* Section Header (Without confusing title/subtitle as requested) */}
+        <div className="text-center max-w-3xl mx-auto space-y-2 mb-4">
           <div 
             onClick={handleBadgeClick}
             className="inline-flex items-center space-x-2 bg-sky-100 text-sky-800 text-[11px] font-black tracking-widest uppercase px-3.5 py-1 rounded-full border border-sky-200 shadow-xs cursor-pointer select-none transition-all hover:bg-sky-200/80"
-            title={isAdmin ? "Modo Editor activo (Haz 3 clics para salir del modo editor)" : "Presentación del programa (Haz 3 clics para abrir modo editor)"}
+            title={isAdmin ? "Modo Editor activo (Haz 3 clics para salir del modo editor)" : "Presentación (Haz 3 clics para abrir modo editor)"}
           >
             <Sparkles className="w-3.5 h-3.5 text-sky-600" />
             <span>{t.badge}</span>
@@ -474,14 +497,6 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
               </span>
             )}
           </div>
-
-          <h2 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight leading-tight">
-            {t.title}
-          </h2>
-
-          <p className="text-sm sm:text-base font-semibold text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            {t.subtitle}
-          </p>
 
           {/* Active video indicator badge (ONLY VISIBLE IN ADMIN MODE) */}
           {isAdmin && config.isAttachedFile && attachedMeta && (
@@ -692,7 +707,14 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
             >
               {/* Poster Image */}
               <img
-                src={config.posterUrl}
+                src={
+                  config.posterUrl && !config.posterUrl.includes('0c66d102') && !config.posterUrl.includes('403')
+                    ? config.posterUrl
+                    : DEFAULT_VIDEO_CONFIG.posterUrl
+                }
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = DEFAULT_VIDEO_CONFIG.posterUrl;
+                }}
                 alt="Vidéo de présentation du programme"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
