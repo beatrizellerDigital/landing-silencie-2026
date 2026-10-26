@@ -56,8 +56,8 @@ export const DEFAULT_VIDEO_CONFIG: VideoConfiguration = {
   enabled: true,
   // Video oficial de presentación del libro: "Silencia Tu Mente"
   url: '/videos/presentacion.mp4',
-  // Portada oficial del libro
-  posterUrl: '/assets/aistudio/image_0c66d102.png',
+  // Portada serena y profesional para el reproductor
+  posterUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80',
   autoplay: true,
   loop: false,
   controls: true,

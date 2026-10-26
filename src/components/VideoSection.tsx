@@ -1034,7 +1034,7 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
                     <div className="flex flex-col gap-2">
                       <button
                         type="button"
-                        onClick={() => handlePresetSelect('/assets/aistudio/SILENCIA_TU_MENTE-es_1a438279.mp4', '/assets/aistudio/image_0c66d102.png')}
+                        onClick={() => handlePresetSelect('/assets/aistudio/SILENCIA_TU_MENTE-es_1a438279.mp4', 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80')}
                         className="text-left px-3 py-2.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 transition flex items-center justify-between text-xs cursor-pointer font-bold shadow-xs"
                       >
                         <div className="flex flex-col">
@@ -1049,7 +1049,7 @@ export default function VideoSection({ lang, onScrollToPricing }: VideoSectionPr
 
                       <button
                         type="button"
-                        onClick={() => handlePresetSelect('/videos/presentacion.mp4', '/assets/aistudio/image_0c66d102.png')}
+                        onClick={() => handlePresetSelect('/videos/presentacion.mp4', 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80')}
                         className="text-left px-3 py-2 rounded-lg bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-900 transition flex items-center justify-between text-xs cursor-pointer font-bold"
                       >
                         <div className="flex flex-col">
